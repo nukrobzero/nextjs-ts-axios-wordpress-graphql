@@ -17,6 +17,9 @@ export default async function handler(
             title
             status
             uri
+            excerpt
+            date
+            databaseId
           }
         }
       }

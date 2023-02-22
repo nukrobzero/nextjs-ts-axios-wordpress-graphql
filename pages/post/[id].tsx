@@ -13,8 +13,8 @@ export default function SinglePost({ post }: Data) {
   return (
     <>
       <article>
-        <h1>{post.title}</h1>
-        <div dangerouslySetInnerHTML={{ __html: post.content }} />
+        <h1>{post.node.title}</h1>
+        <div dangerouslySetInnerHTML={{ __html: post.node.content }} />
       </article>
     </>
   );
@@ -36,8 +36,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }: any) => {
-  const res = await fetch(`${process.env.SITE_URL}/api/getPosts/${params.id}`); //fix
-  const post = await res.json();
+  const allData = await getPosts();
+  const posts = allData?.data?.posts?.edges || [];
+  const post = posts.find((post: any) => post.node.id.toString() === params.id);
   return {
     props: { post },
     revalidate: 10,
